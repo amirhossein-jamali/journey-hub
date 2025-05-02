@@ -1,23 +1,21 @@
-version: "2"
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - "*.go"
+        allow:
+          - $gostd
+          - gopkg.in/natefinch/lumberjack.v2
+          - github.com/amirhossein-jamali/journey-hub
+          - github.com/fsnotify/fsnotify 
+          - github.com/spf13/viper
+          - go.uber.org/zap
+          - go.uber.org/zap/zapcore
 
 linters:
   enable:
     - typecheck
-
-  settings:
-    depguard:
-      rules:
-        main:
-          files:
-            - "*.go"
-          allow:
-            - $gostd
-            - gopkg.in/natefinch/lumberjack.v2
-            - github.com/amirhossein-jamali/journey-hub
-            - github.com/fsnotify/fsnotify 
-            - github.com/spf13/viper
-            - go.uber.org/zap
-            - go.uber.org/zap/zapcore
 
 issues:
   max-same-issues: 50 
