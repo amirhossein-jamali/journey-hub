@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  title: Journey Hub API
+  description: API for Journey Hub platform for travel experiences
+  version: 0.1.0
+  contact:
+    email: info@journeyhub.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development server
+  - url: https://api.journeyhub.com/v1
+    description: Production server
+
+tags:
+  - name: auth
+    description: Authentication operations
+  - name: user
+    description: User operations
+  - name: journey
+    description: Journey operations
+  - name: booking
+    description: Booking operations
+  - name: review
+    description: Review operations
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Checks if the API is up and running
+      operationId: healthCheck
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  version:
+                    type: string
+                    example: 0.1.0
+        '500':
+          description: API is not healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: INTERNAL_ERROR
+        message:
+          type: string
+          example: An internal error occurred
+        details:
+          type: object
+          additionalProperties: true
+      required:
+        - code
+        - message 

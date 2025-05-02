@@ -1,0 +1,81 @@
+app:
+  name: "Journey Hub"
+  version: "0.1.0"
+  environment: "test"
+  debug: true
+
+server:
+  host: "0.0.0.0"
+  port: 8081
+  read_timeout: "15s"
+  write_timeout: "15s"
+  idle_timeout: "60s"
+  allow_origins: ["*"]
+
+database:
+  uri: "mongodb://mongo:27017"
+  name: "journeyhub_test"
+  connect_timeout: "10s"
+  max_conn_idle_time: "60s"
+  max_pool_size: 50
+  user: "admin"
+  # Sample encrypted password (will be decrypted automatically)
+  password: "ENC:C0FBIV7jHQc9N7kDTtWmIs0EqmuMEXOTvjikFkOnvsHlQ81gvJLkl4oOLQLYnomgtQ=="
+  enable_command_monitor: true
+
+redis:
+  uri: "redis:6379"
+  # Sample encrypted password (will be decrypted automatically)
+  password: "ENC:C0FBIV7jHQc9N7kDTtWmIs0EqmuMEXOTvjikFkOnvsHlQ81gvJLkl4oOLQLYnomgtQ=="
+  db: 1
+  pool_size: 5
+  connect_timeout: "5s"
+  max_retries: 3
+  min_idle_conns: 2
+  idle_timeout: "5m"
+  enable_cache_prefix: true
+  cache_prefix: "jh_test:"
+
+storage:
+  endpoint: "minio:9000"
+  access_key_id: "minioadmin"
+  # Sample encrypted secret key (will be decrypted automatically)
+  secret_access_key: "ENC:k7fxaRBBkVqd5Nu9LasLmrFVuSXvOOX+meHCnXp24Qptcd19r8bdorm/qShE21lrav1x"
+  use_ssl: false
+  bucket_name: "journeyhub-test"
+  location: "us-east-1"
+  base_path: "uploads-test"
+
+jwt:
+  # Sample encrypted JWT secret (will be decrypted automatically)
+  secret: "ENC:sl3FFKxnuhQKkvkJg4vrQNNgVk4DpzVyRJJLHT6Vrg5FHZy05pkobMOnbRJoVlg3JQI7h5YJ6ItDD+Ewgj77aV84ElNKN0ko"
+  access_token_ttl: "15m"
+  refresh_token_ttl: "168h"
+  issuer: "journeyhub-test"
+  audience: "journeyhub-test-users"
+  signing_algorithm: "HS256"
+
+log:
+  level: "debug"  # debug, info, warn, error, fatal
+  format: "console"  # json, console
+  output: "stdout"  # stdout, file
+  enable_file: true
+  file_path: "logs/app-test.log"
+  max_size: 10  # 10MB
+  max_backups: 3
+  max_age: 7  # 7 days
+  compress: true
+
+swagger:
+  enabled: true
+  host: "localhost:8081"
+  base_path: "/api/v1"
+  schemes: "http"
+  title: "Journey Hub API (Test)"
+  description: "API for Journey Hub travel platform - Test Environment"
+  version: "1.0"
+
+monitoring:
+  enabled: true
+  prometheus_port: 9091
+  health_check_path: "/health" 

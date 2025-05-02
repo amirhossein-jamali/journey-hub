@@ -1,0 +1,5 @@
+logger:
+  level: "debug"
+  encoding: "console"
+  output_path: "stdout"
+  dev_mode: true 

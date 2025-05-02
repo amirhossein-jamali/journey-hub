@@ -1,4 +1,4 @@
-# Go specific
+# Go related
 *.exe
 *.exe~
 *.dll
@@ -6,108 +6,95 @@
 *.dylib
 *.test
 *.out
-/vendor/
-/Godeps/
-
-# Go workspace file
 go.work
 
-# Go coverage files
-*.coverprofile
-
-# Binaries and build folders
+# Output directories
 /bin/
-/build/
 /dist/
 
-# Frontend specific
-/frontend/node_modules/
+# IDE specific files
+.idea/
+# .vscode/*
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+.vscode/
+*.sublime-workspace
+*.swp
+*.swo
+.DS_Store
+
+# Log files
+*.log
+*.log.*
+logs/
+
+# Personal configuration files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env.yaml
+*.env.yml
+*.env.json
+
+# Frontend related
+# dependencies
+/frontend/node_modules
 /frontend/.pnp
 /frontend/.pnp.js
+
+# testing
 /frontend/coverage
-/frontend/.next/
-/frontend/out/
+
+# production
 /frontend/build
-/frontend/dist
-/frontend/.DS_Store
-/frontend/.env.local
-/frontend/.env.development.local
-/frontend/.env.test.local
-/frontend/.env.production.local
+
+# misc
 /frontend/npm-debug.log*
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
 
-# Environment variables and secrets
-.env
-*.env
-.env.local
-.env.development
-.env.test
-.env.production
-config.yaml
-config.yml
-!example.config.yaml
-!example.config.yml
-/backend/config/*.yaml
-/backend/config/*.yml
-!/backend/config/example.*.yaml
+# Swagger
+/backend/api/swagger/ui/
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# Binaries for programs and plugins
+/backend/tmp/
+tmp/
 
-# Temporary files
-*.tmp
-*.temp
-*~
-*.swp
-*.swo
-
-# IDE specific files
-.idea/
-.vscode/
-*.sublime-workspace
-*.sublime-project
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Docker
-.docker/data/
-
-# Generated Swagger documentation
-/backend/api/swagger/gen/
-
-# Test binary, built with `go test -c`
-*.test
-
-# Output of the go coverage tool
-*.out
-
-# Dependency directories (remove if used with Go modules)
+# Dependencies
 /vendor/
-/Godeps/
 
 # MongoDB data directory
-/data/mongodb/
+/data/
+/mongo-data/
+/mongodb/
 
-# Redis data directory
-/data/redis/
+# Redis data
+/redis-data/
+dump.rdb
+*.rdb
 
-# MinIO data directory
-/data/minio/
+# MinIO data
+/minio-data/
 
-# Generated files
-/backend/api/docs/ 
+# Air build files
+.air.toml.tmp
+
+# Coverage reports
+coverage.txt
+coverage.html
+profile.out
+
+# Config files that might contain sensitive data
+/backend/config/*.local.yaml
+/backend/config/*.local.yml
+/backend/config/*.local.json
+
+# Generated swagger docs
+/backend/docs/swagger/
+
+# Generated mocks for testing
+*_mock.go 

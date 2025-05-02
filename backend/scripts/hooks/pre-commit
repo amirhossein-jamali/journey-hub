@@ -1,0 +1,82 @@
+#!/bin/sh
+# Pre-commit hook for Go code formatting and linting
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Get all staged .go files
+STAGED_GO_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.go$')
+
+# Check if we have any Go files to check
+if [[ "$STAGED_GO_FILES" = "" ]]; then
+  echo "${YELLOW}No Go files staged for commit, skipping Go checks.${NC}"
+  exit 0
+fi
+
+# Define execution success
+PASS=true
+
+# Format all staged .go files
+echo "${YELLOW}Formatting staged Go files...${NC}"
+for FILE in $STAGED_GO_FILES
+do
+  # Skip files that don't exist (might have been renamed/deleted)
+  if [[ ! -f "$FILE" ]]; then
+    continue
+  fi
+
+  # Run gofmt on the file
+  gofmt -l -w "$FILE"
+  
+  # Add the formatted file back to staging
+  git add "$FILE"
+done
+
+# Run golangci-lint on staged files
+echo "${YELLOW}Running golangci-lint on staged Go files...${NC}"
+cd backend && golangci-lint run $STAGED_GO_FILES
+
+# Check if golangci-lint found issues
+if [[ $? != 0 ]]; then
+  echo "${RED}golangci-lint found issues, please fix them before committing.${NC}"
+  PASS=false
+fi
+
+# Run govulncheck to check for security vulnerabilities
+echo "${YELLOW}Checking for security vulnerabilities...${NC}"
+cd "$(git rev-parse --show-toplevel)/backend" && ./scripts/govulncheck.sh
+
+# Check if govulncheck found issues
+if [[ $? != 0 ]]; then
+  echo "${RED}Security vulnerabilities detected. Please review and fix before committing.${NC}"
+  PASS=false
+fi
+
+# Check for Swagger comments in modified API handlers
+for FILE in $STAGED_GO_FILES
+do
+  # Skip files that don't exist (might have been renamed/deleted)
+  if [[ ! -f "$FILE" ]]; then
+    continue
+  fi
+
+  # Only check handlers files
+  if [[ "$FILE" =~ "handler.go" ]]; then
+    if ! grep -q "@Router" "$FILE"; then
+      echo "${RED}File $FILE appears to be a handler but does not contain Swagger Router annotations. Please add proper Swagger documentation.${NC}"
+      PASS=false
+    fi
+  fi
+done
+
+# If there are any issues, abort the commit
+if ! $PASS; then
+  echo "${RED}Pre-commit checks failed. Please fix the issues above and try again.${NC}"
+  exit 1
+fi
+
+echo "${GREEN}All pre-commit checks passed!${NC}"
+exit 0 

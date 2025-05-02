@@ -1,0 +1,5 @@
+logger:
+  level: "info"
+  encoding: "json"
+  output_path: "logs/journey-hub.log"
+  dev_mode: false 

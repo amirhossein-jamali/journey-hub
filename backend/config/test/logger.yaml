@@ -1,0 +1,5 @@
+logger:
+  level: "warn"
+  encoding: "console"
+  output_path: "stdout"
+  dev_mode: false 
