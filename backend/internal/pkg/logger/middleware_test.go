@@ -36,7 +36,10 @@ func TestMiddleware(t *testing.T) {
 	// Create a test handler that will be wrapped by our middleware
 	testHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		_, err := w.Write([]byte("OK"))
+		if err != nil {
+			t.Fatalf("Failed to write response: %v", err)
+		}
 	})
 
 	// Create middleware
@@ -118,7 +121,10 @@ func TestMiddlewareWithErrorResponse(t *testing.T) {
 	// Create a test handler that returns an error status
 	errorHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Internal Server Error"))
+		_, err := w.Write([]byte("Internal Server Error"))
+		if err != nil {
+			t.Fatalf("Failed to write response: %v", err)
+		}
 	})
 
 	// Apply middleware

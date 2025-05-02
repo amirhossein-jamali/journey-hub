@@ -1,3 +1,5 @@
+// Package config provides configuration management using viper, supporting
+// different environments, hot reloading, and secure configuration storage.
 package config
 
 import (
@@ -181,7 +183,7 @@ func RegisterDecryptionHook() {
 	// Register a hook to process values as they are read
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		// Config file changed, ensure decryption is applied
-		if err := DecryptConfigValues(&GlobalConfig); err != nil {
+		if err := DecryptConfigValues(GlobalConfig); err != nil {
 			fmt.Printf("Error decrypting config values after change: %s\n", err)
 		}
 	})

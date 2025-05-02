@@ -1,3 +1,5 @@
+// Package config provides configuration management using viper, supporting
+// different environments, hot reloading, and secure configuration storage.
 package config
 
 import (
@@ -119,8 +121,8 @@ type MonitoringConfig struct {
 	HealthCheckPath string `mapstructure:"health_check_path"`
 }
 
-// Global instance of configuration that can be accessed from other packages
-var GlobalConfig Config
+// GlobalConfig is the global instance of configuration that can be accessed from other packages
+var GlobalConfig *Config
 
 // configChangeCallbacks holds functions to be called when config changes
 var configChangeCallbacks []func()
@@ -180,7 +182,7 @@ func LoadConfig(configPath string) (*Config, error) {
 	}
 
 	// Store the config in the global variable
-	GlobalConfig = *config
+	GlobalConfig = config
 
 	// Setup hot-reload of configuration
 	setupConfigHotReload()
@@ -211,7 +213,7 @@ func setupConfigHotReload() {
 		}
 
 		// Update the global config
-		GlobalConfig = *newConfig
+		GlobalConfig = newConfig
 		fmt.Println("Config reloaded successfully")
 
 		// Call all registered callbacks

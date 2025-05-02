@@ -157,10 +157,12 @@ func TestInitLogger(t *testing.T) {
 	require.NotNil(t, logger)
 
 	// Force logger to sync to ensure log is written
-	logger.Sync()
+	err = logger.Sync()
+	require.NoError(t, err)
 
 	// Read the log file content
-	tmpFile.Seek(0, 0)
+	_, err = tmpFile.Seek(0, 0)
+	require.NoError(t, err)
 	content, err := io.ReadAll(tmpFile)
 	require.NoError(t, err)
 
@@ -306,7 +308,8 @@ func TestLogRotation(t *testing.T) {
 		}
 
 		// Force sync after each batch
-		zapLogger.Sync()
+		err = zapLogger.Sync()
+		require.NoError(t, err)
 
 		// Check if rotation has occurred
 		files, _ := filepath.Glob(filepath.Join(tempDir, "test_rotation.log.*"))
@@ -317,7 +320,8 @@ func TestLogRotation(t *testing.T) {
 	}
 
 	// Force sync to ensure all logs are written
-	zapLogger.Sync()
+	err = zapLogger.Sync()
+	require.NoError(t, err)
 
 	// Verify that the log file exists
 	_, err = os.Stat(logFilePath)
