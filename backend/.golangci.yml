@@ -1,171 +1,23 @@
-run:
-  # Timeout for analysis, e.g. 30s, 5m.
-  timeout: 5m
-
-  # Exit code when at least one issue was found.
-  issues-exit-code: 1
-
-  # Include test files or not.
-  tests: true
-
-  # List of build tags to consider.
-  build-tags: []
-
-  # Which dirs to skip: they won't be analyzed.
-  skip-dirs:
-    - vendor
-    - api/swagger/gen
-
-  # Which files to skip: they will be analyzed, but issues from them won't be reported.
-  skip-files: []
-
-# Output configuration options
-output:
-  # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
-  format: colored-line-number
-
-  # Print lines of code with issue.
-  print-issued-lines: true
-
-  # Print linter name in the end of issue text.
-  print-linter-name: true
-
-# All available settings of specific linters
-linters-settings:
-  errcheck:
-    # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
-    check-type-assertions: true
-    # Report about assignment of errors to blank identifier: `_ = err`.
-    check-blank: true
-  
-  gocyclo:
-    # Minimal code complexity to report.
-    min-complexity: 15
-  
-  dupl:
-    # Tokens count to trigger issue.
-    threshold: 100
-  
-  goconst:
-    # Minimal length of string constant.
-    min-len: 3
-    # Minimal occurrences count to trigger.
-    min-occurrences: 3
-  
-  govet:
-    # Report about shadowed variables.
-    check-shadowing: true
-  
-  goimports:
-    # Put imports beginning with prefix after 3rd-party packages.
-    local-prefixes: github.com/amirhossein-jamali/journey-hub
-  
-  gocognit:
-    # Minimal code complexity to report.
-    min-complexity: 20
-  
-  maligned:
-    # Print struct with more effective memory layout.
-    suggest-new: true
-  
-  prealloc:
-    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos.
-    simple: true
-    range-loops: true
-    for-loops: true
-  
-  gocritic:
-    # Enable multiple checks by tags.
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-  
-  funlen:
-    lines: 100
-    statements: 50
-  
-  godox:
-    # Report any comments starting with keywords.
-    keywords:
-      - NOTE
-      - OPTIMIZE
-      - HACK
-  
-  dogsled:
-    # Checks assignments with too many blank identifiers.
-    max-blank-identifiers: 2
-  
-  whitespace:
-    multi-if: false
-    multi-func: false
+version: "2"
 
 linters:
-  disable-all: true
   enable:
-    - bodyclose        # Checks whether HTTP response body is properly closed
-    - deadcode         # Finds unused code
-    - depguard         # Package imports are checked against a list of allowed packages
-    - dogsled          # Checks for assignments with too many blank identifiers
-    - dupl             # Code clone detection
-    - errcheck         # Checking for unchecked errors
-    - funlen           # Detects long functions
-    - gochecknoinits   # Checks that no init functions are present
-    - goconst          # Finds repeated strings that could be constants
-    - gocritic         # Provides diagnostics that check for bugs, performance and style issues
-    - gocyclo          # Computes the cyclomatic complexity of functions
-    - gofmt            # Checks whether code was gofmt-ed
-    - goimports        # Manages imports in Go source files
-    - golint           # Golint is a linter for Go source code
-    - gosec            # Inspects source code for security problems
-    - gosimple         # Linter for Go source code that specializes in simplifying
-    - govet            # Reports suspicious constructs
-    - ineffassign      # Detects when assignments to existing variables are not used
-    - lll              # Reports long lines
-    - misspell         # Finds commonly misspelled English words
-    - nakedret         # Finds naked returns
-    - prealloc         # Finds slice declarations that could potentially be preallocated
-    - staticcheck      # State of the art linting
-    - structcheck      # Finds unused struct fields
-    - stylecheck       # Stylecheck is a replacement for golint
-    - typecheck        # Parser and type analyzer
-    - unconvert        # Remove unnecessary type conversions
-    - unparam          # Reports unused function parameters
-    - unused           # Checks for unused constants, variables, functions and types
-    - varcheck         # Finds unused global variables and constants
-    - whitespace       # Tool for detection of leading and trailing whitespace
+    - typecheck
+
+  settings:
+    depguard:
+      rules:
+        main:
+          files:
+            - "*.go"
+          allow:
+            - $gostd
+            - gopkg.in/natefinch/lumberjack.v2
+            - github.com/amirhossein-jamali/journey-hub
+            - github.com/fsnotify/fsnotify 
+            - github.com/spf13/viper
+            - go.uber.org/zap
+            - go.uber.org/zap/zapcore
 
 issues:
-  # Maximum count of issues with the same text.
-  max-same-issues: 3
-  
-  # Maximum issues count per one linter.
-  max-issues-per-linter: 50
-  
-  # Show only new issues: if there are unstaged changes, show only those changes.
-  new: false
-  
-  # List of regexps of issue texts to exclude.
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - gocyclo
-        - errcheck
-        - dupl
-        - gosec
-        - funlen
-
-    - linters:
-        - lll
-      source: "^//go:generate "
-
-  # Exclude some linters from running on tests files.
-  exclude-use-default: false
-
-  # Disable the default exclusions.
-  exclude-case-sensitive: false
-
-  # Fix found issues (if it's supported by the linter).
-  fix: true 
+  max-same-issues: 50 
